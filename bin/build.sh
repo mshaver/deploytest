@@ -1,0 +1,1 @@
+cd /Users/mshaver/Sites/deploytest/www && git pull
