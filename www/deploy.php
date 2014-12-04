@@ -1,29 +1,21 @@
 <?php #!/usr/bin/env /usr/bin/php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-set_time_limit(0);
+  error_reporting(0);
  
-try {
- 
-  $payload = json_decode($_REQUEST['payload']);
- 
-}
-catch(Exception $e) {
- 
-    //log the error
-    file_put_contents('/Users/mshaver/Sites/deploytest/logs/github.txt', $e . ' ' . $payload, FILE_APPEND);
- 
+  try {
+    // Decode the payload json string
+    $payload = json_decode($_REQUEST['payload']);
+  }
+  
+  catch(Exception $e) {
       exit(0);
-}
+  }
  
-if ($payload->ref === 'refs/heads/master') {
+  if ($payload->ref === 'refs/heads/master') {
  
-    $project_directory = '/Users/mshaver/Sites/deploytest/www/';
+    // Log the payload object
+    file_put_contents('logs/github.txt', print_r($payload, TRUE), FILE_APPEND);
  
-    $output = shell_exec("/Users/mshaver/Sites/deploytest/bin/build.sh");
- 
-    //log the request
-    file_put_contents('/Users/mshaver/Sites/deploytest/logs/github.txt', $output, FILE_APPEND);
- 
+    // Run the build script 
+    shell_exec("./bin/build.sh");
 }
 ?>

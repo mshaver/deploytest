@@ -1,1 +1,3 @@
-cd /Users/mshaver/Sites/deploytest/www && git pull
+#! /usr/bin/env bash
+
+git pull
