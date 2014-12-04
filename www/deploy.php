@@ -13,9 +13,9 @@
   if ($payload->ref === 'refs/heads/master') {
  
     // Log the payload object
-    file_put_contents('/Users/mshaver/Sites/deploytest/logs/github.txt', print_r($payload, TRUE), FILE_APPEND);
+    //file_put_contents('/Users/mshaver/Sites/deploytest/logs/github.txt', print_r($payload, TRUE), FILE_APPEND);
  
     // Run the build script 
-    $message = shell_exec('/Users/mshaver/Sites/deploytest/bin/build.sh 2>&1');
-    print_r($message);
+    //$message = shell_exec('/Users/mshaver/Sites/deploytest/bin/build.sh 2>&1');
+    print_r('Payload successfully delivered!');
   }
