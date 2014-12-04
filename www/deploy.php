@@ -17,5 +17,7 @@
  
     // Run the build script 
     //$message = shell_exec('/Users/mshaver/Sites/deploytest/bin/build.sh 2>&1');
-    print_r('Payload successfully delivered!');
+    die("Payload successfully delivered!" . mktime());
   }
+
+?>
