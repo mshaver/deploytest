@@ -1,23 +1,29 @@
 <?php #!/usr/bin/env /usr/bin/php
-  error_reporting(0);
- 
-  try {
-    // Decode the payload json string
-    $payload = json_decode($_REQUEST['payload']);
-  }
+
+// Set Variables
+$LOCAL_ROOT         = "/Users/mshaver/Sites/deploytest/";
+$LOCAL_REPO_NAME    = "deploytest";
+$LOCAL_REPO         = "{$LOCAL_ROOT}/{$LOCAL_REPO_NAME}";
+$REMOTE_REPO        = "git@github.com:mshaver/deploytest.git";
+$BRANCH             = "master";
+
+if ( $_POST['payload'] ) {
+  // Only respond to POST requests from Github
   
-  catch(Exception $e) {
-      exit(0);
+  if( file_exists($LOCAL_REPO) ) {
+    
+    // If there is already a repo, just run a git pull to grab the latest changes
+    shell_exec("cd {$LOCAL_REPO} && git pull");
+
+    die("done " . mktime());
+  } else {
+    
+    // If the repo does not exist, then clone it into the parent directory
+    shell_exec("cd {$LOCAL_ROOT} && git clone {$REMOTE_REPO}");
+    
+    die("done " . mktime());
   }
- 
-  if ($payload->ref === 'refs/heads/master') {
- 
-    // Log the payload object
-    //file_put_contents('/Users/mshaver/Sites/deploytest/logs/github.txt', print_r($payload, TRUE), FILE_APPEND);
- 
-    // Run the build script 
-    //$message = shell_exec('/Users/mshaver/Sites/deploytest/bin/build.sh 2>&1');
-    die("Payload successfully delivered!" . mktime());
-  }
+}
+  
 
 ?>
