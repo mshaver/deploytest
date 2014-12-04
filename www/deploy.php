@@ -18,6 +18,20 @@ define('PROJECTS_PATH', '/Users/mshaver/Sites/');
  **/
 define('SERVER_KEY', 'a6h242t4M8gf');
 
+$headers = getallheaders();
+$hubSignature = $headers['X-Hub-Signature'];
+ 
+list($algo, $hash) = explode('=', $hubSignature, 2);
+ 
+$payload = file_get_contents('php://input');
+$data    = json_decode($payload);
+ 
+$payloadHash = hash_hmac($algo, $payload, SERVER_KEY);
+ 
+if ($hash !== $payloadHash) {
+    die('Bad secret');
+}
+
 // parse the json payload
 $payload = json_decode($_REQUEST['payload']);
 
