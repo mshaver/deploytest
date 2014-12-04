@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 
-# git pull
+git pull origin master
 
 echo "Testscript run succesful"
