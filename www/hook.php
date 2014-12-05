@@ -41,7 +41,7 @@
 		$arrSiteConfig = array_merge(
 			array(
 				'repository' => '*',
-        'key' => '*'
+        'key' => '*',
 				'branch' => '*',
 				'username' => '*',
 				'execute' => array()
@@ -52,7 +52,7 @@
 		$boolPassesChecks = TRUE;
 
 		// Key check
-		if (($arrSiteConfig['key'] != '*') && ($arrSiteConfig['key'] != $_POST['key'])) {
+		if (($arrSiteConfig['key'] != '*') && ($arrSiteConfig['key'] != $_GET['sat'])) {
 			$boolPassesChecks = FALSE;
 		}
 
