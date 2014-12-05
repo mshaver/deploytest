@@ -17,7 +17,7 @@
 	 
 	set_time_limit(90);
 
-	include '/Users/mshaver/Sites/deploytest/bin/config.php';
+	include '../util/local-config.php';
 
 	// Make sure the configuration is setup
 	if (!isset($arrConfig) || empty($arrConfig)) {
