@@ -41,6 +41,7 @@
 		$arrSiteConfig = array_merge(
 			array(
 				'repository' => '*',
+        'key' => '*'
 				'branch' => '*',
 				'username' => '*',
 				'execute' => array()
@@ -49,6 +50,11 @@
 		);
 
 		$boolPassesChecks = TRUE;
+
+		// Key check
+		if (($arrSiteConfig['key'] != '*') && ($arrSiteConfig['key'] != $_POST['key'])) {
+			$boolPassesChecks = FALSE;
+		}
 
 		// Repository name check
 		if (($arrSiteConfig['repository'] != '*') && ($arrSiteConfig['repository'] != $objPayload->repository->name)) {
