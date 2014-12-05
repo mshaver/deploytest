@@ -53,6 +53,7 @@
 		// Repository name check
 		if (($arrSiteConfig['repository'] != '*') && ($arrSiteConfig['repository'] != $objPayload->repository->name)) {
 			$boolPassesChecks = FALSE;
+      error_log($objPayload->repository->name);
 		}
 		
 		// Branch name check
