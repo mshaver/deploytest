@@ -40,8 +40,26 @@
 	// Grab the tastylious JSON payload from GitHub
 	$objPayload = json_decode(stripslashes($_POST['payload']));
 
-  $rawPayload = (isset($_POST['payload']))? $_POST['payload'] : '';
-
+  // Get the request body
+  $input = false;
+  switch($_SERVER['CONTENT_TYPE']) {
+  	case 'application/json':
+  		echo "Received JSON data in body.\n";
+  		$input = file_get_contents('php://input');
+  		break;
+  	case 'application/x-www-form-urlencoded':
+  		echo "Received URL-encoded form data in body.\n";
+  		$input = (isset($_POST['payload']))? $_POST['payload'] : '';
+  		break;
+  	default:
+  		http_response_code(400);
+  		die("Don't know what to do with {$_SERVER['CONTENT_TYPE']} content type.");
+  } 
+  if(!$input) {
+  	http_response_code(400);
+  	die('No POST body sent.');
+  }
+  
 	// Loop through the configs to see which one matches the payload
 	foreach ($arrConfig as $strSiteName => $arrSiteConfig) {
 		
@@ -60,9 +78,9 @@
 		$boolPassesChecks = TRUE;
     
     // Secret key check
-    if(($arrSiteConfig['secretkey'] != '*') && ("sha1=" . hash_hmac('sha1', stripslashes($rawPayload), $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
+    if(($arrSiteConfig['secretkey'] != '*') && ("sha1=" . hash_hmac('sha1', $input, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	//http_response_code(403);
-      error_log("sha1=" . hash_hmac('sha1', stripslashes($rawPayload), $arrSiteConfig['secretkey'], false));
+      error_log("sha1=" . hash_hmac('sha1', $input, $arrSiteConfig['secretkey'], false));
     	error_log("Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
