@@ -56,7 +56,7 @@
 				throw new Exception( 'Missing X-Hub-Signature header. Did you configure secret token in hook settings?' );
 			}
 	
-			return 'sha1=' . hash_hmac( 'sha1', $objPayload, $SecretKey, false ) === $_SERVER[ 'HTTP_X_HUB_SIGNATURE' ];
+			return 'sha1=' . hash_hmac( 'sha1', $_POST['payload'], $SecretKey, false ) === $_SERVER[ 'HTTP_X_HUB_SIGNATURE' ];
 		}
         
 		// Sectret token check
