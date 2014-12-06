@@ -62,7 +62,8 @@
     // Secret key check
     if(($arrSiteConfig['secretkey'] != '*') && ('sha1=' . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	//http_response_code(403);
-    	die('Secret (X-Hub-Signature header) is wrong or does not match request body.');
+    	//die('Secret (X-Hub-Signature header) is wrong or does not match request body.');
+      $boolPassesChecks = FALSE;
     }
 
 		// Repository name check
