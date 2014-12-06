@@ -51,9 +51,23 @@
 
 		$boolPassesChecks = TRUE;
 
-		// Key check
+    function ValidateHubSignature( $SecretKey ) {
+			if (!array_key_exists( 'HTTP_X_HUB_SIGNATURE', $_SERVER )) {
+				throw new Exception( 'Missing X-Hub-Signature header. Did you configure secret token in hook settings?' );
+			}
+	
+			return 'sha1=' . hash_hmac( 'sha1', $objPayload, $SecretKey, false ) === $_SERVER[ 'HTTP_X_HUB_SIGNATURE' ];
+		}
+        
+		// Sectret token check
 		if (($arrSiteConfig['key'] != '*') && ($arrSiteConfig['key'] != $_GET['sat'])) {
 			$boolPassesChecks = FALSE;
+		}
+    
+		if( !ValidateHubSignature($arrSiteConfig['key']) ) {
+			http_response_code( 401 );
+			
+			exit;
 		}
 
 		// Repository name check
