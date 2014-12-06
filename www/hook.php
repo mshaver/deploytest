@@ -21,7 +21,7 @@
 
 	// Make sure the configuration is setup
 	if (!isset($arrConfig) || empty($arrConfig)) {
-		error_log("GitHub Webhook Error: missing config.php or no configuration definitions setup");
+		error_log("GitHub Webhook Error: missing local-config.php or no configuration definitions setup");
 		exit;
 	}
 
@@ -30,6 +30,12 @@
 		error_log("GitHub Webhook Error: missing expected POST parameter 'payload'");
 		exit;
 	}
+  
+  // Check for the HTTP_X_HUB_SIGNATURE
+  if(!isset($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
+  	http_response_code(401);
+  	die('Secret (X-Hub-Signature header) is missing from request. Have you set a secret in GitHub\'s project settings?');
+  }
 
 	// Grab the tastylious JSON payload from GitHub
 	$objPayload = json_decode(stripslashes($_POST['payload']));
@@ -41,7 +47,7 @@
 		$arrSiteConfig = array_merge(
 			array(
 				'repository' => '*',
-        'key' => '*',
+        'secretkey' => '*',
 				'branch' => '*',
 				'username' => '*',
 				'execute' => array()
@@ -50,25 +56,12 @@
 		);
 
 		$boolPassesChecks = TRUE;
-
-    function ValidateHubSignature( $SecretKey ) {
-			if (!array_key_exists( 'HTTP_X_HUB_SIGNATURE', $_SERVER )) {
-				throw new Exception( 'Missing X-Hub-Signature header. Did you configure secret token in hook settings?' );
-			}
-	
-			return 'sha1=' . hash_hmac( 'sha1', $_POST['payload'], $SecretKey, false ) === $_SERVER[ 'HTTP_X_HUB_SIGNATURE' ];
-		}
-        
-		// Sectret token check
-		if (($arrSiteConfig['key'] != '*') && ($arrSiteConfig['key'] != $_GET['sat'])) {
-			$boolPassesChecks = FALSE;
-		}
     
-		if( !ValidateHubSignature($arrSiteConfig['key']) ) {
-			error_log("Secret token does not match.");
-			
-			exit;
-		}
+    // Secret key check
+    if(($arrSiteConfig['secretkey'] != '*') && ('sha1=' . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
+    	http_response_code(403);
+    	die('Secret (X-Hub-Signature header) is wrong or does not match request body.');
+    }
 
 		// Repository name check
 		if (($arrSiteConfig['repository'] != '*') && ($arrSiteConfig['repository'] != $objPayload->repository->name)) {
