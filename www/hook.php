@@ -62,7 +62,7 @@
     // Secret key check
     if(($arrSiteConfig['secretkey'] != '*') && ("sha1=" . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	//http_response_code(403);
-      var_dump("sha1=" . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false));
+      error_log("sha1=" . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false));
     	error_log("Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
