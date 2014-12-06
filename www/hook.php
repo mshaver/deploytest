@@ -40,7 +40,7 @@
 	// Grab the tastylious JSON payload from GitHub
 	$objPayload = json_decode(stripslashes($_POST['payload']));
 
-  $rawPayload = (isset($_POST['payload']))? $_POST['payload'] : '';
+  $rawPayload = (isset(stripslashes($_POST['payload'])))? stripslashes($_POST['payload']) : '';
 
 	// Loop through the configs to see which one matches the payload
 	foreach ($arrConfig as $strSiteName => $arrSiteConfig) {
