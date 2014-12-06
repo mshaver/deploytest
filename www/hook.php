@@ -65,7 +65,7 @@
 		}
     
 		if( !ValidateHubSignature($arrSiteConfig['key']) ) {
-			http_response_code( 401 );
+			error_log("Secret token does not match.")
 			
 			exit;
 		}
