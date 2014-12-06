@@ -40,7 +40,7 @@
 	// Grab the tastylious JSON payload from GitHub
 	$objPayload = json_decode(stripslashes($_POST['payload']));
 
-  $rawPayload = (isset(stripslashes($_POST['payload'])));
+  $rawPayload = (isset($_POST['payload']))? $_POST['payload'] : '';
 
 	// Loop through the configs to see which one matches the payload
 	foreach ($arrConfig as $strSiteName => $arrSiteConfig) {
@@ -60,9 +60,9 @@
 		$boolPassesChecks = TRUE;
     
     // Secret key check
-    if(($arrSiteConfig['secretkey'] != '*') && ("sha1=" . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
+    if(($arrSiteConfig['secretkey'] != '*') && ("sha1=" . hash_hmac('sha1', stripslashes($rawPayload), $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	//http_response_code(403);
-      error_log("sha1=" . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false));
+      error_log("sha1=" . hash_hmac('sha1', stripslashes($rawPayload), $arrSiteConfig['secretkey'], false));
     	error_log("Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
