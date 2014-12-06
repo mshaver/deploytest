@@ -34,7 +34,7 @@
   // Check for the HTTP_X_HUB_SIGNATURE
   if(!isset($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
   	http_response_code(401);
-  	die('Secret (X-Hub-Signature header) is missing from request. Have you set a secret in GitHub\'s project settings?');
+  	error_log("Secret (X-Hub-Signature header) is missing from request. Have you set a secret in GitHub's project settings?");
   }
 
 	// Grab the tastylious JSON payload from GitHub
@@ -62,7 +62,7 @@
     // Secret key check
     if(($arrSiteConfig['secretkey'] != '*') && ('sha1=' . hash_hmac('sha1', $rawPayload, $arrSiteConfig['secretkey'], false) !== $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	//http_response_code(403);
-    	//die('Secret (X-Hub-Signature header) is wrong or does not match request body.');
+    	error_log("Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
 
