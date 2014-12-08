@@ -57,7 +57,7 @@
   } 
   if(!$payloadBody) {
   	http_response_code(400);
-  	error_log('GitHub Webhook Error: No POST body sent.');
+  	error_log("GitHub Webhook Error: No POST body sent.");
   }
   
   // Hashed secret key
