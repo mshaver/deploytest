@@ -57,11 +57,8 @@
   } 
   if(!$payloadBody) {
   	http_response_code(400);
-  	error_log("GitHub Webhook Error: No POST body sent.");
+  	error_log('GitHub Webhook Error: No POST body sent.');
   }
-  
-  // Hashed secret key
-  $secretKey = ("sha1=" . hash_hmac('sha1', $payloadBody, $arrSiteConfig['secretkey'], false));
   
 	// Loop through the configs to see which one matches the payload
 	foreach ($arrConfig as $strSiteName => $arrSiteConfig) {
@@ -80,8 +77,11 @@
 
 		$boolPassesChecks = TRUE;
     
+    // Hashed secret key
+    $secretKey = "sha1=" . hash_hmac('sha1', $payloadBody, $arrSiteConfig['secretkey'], false);
+    
     // Secret key check
-    if(($arrSiteConfig['secretkey'] != '*') && md5($secretKey) !== md5($_SERVER['HTTP_X_HUB_SIGNATURE']))) {
+    if(($arrSiteConfig['secretkey'] != '*') && md5($secretKey) !== md5($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     	error_log("GitHub Webhook Error: Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
