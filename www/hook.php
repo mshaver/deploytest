@@ -61,7 +61,7 @@
   }
   
   // Hashed secret key
-  $secretKey = ("sha1=" . hash_hmac('sha1', $payloadBody, $arrSiteConfig['secretkey'], false);
+  $secretKey = ("sha1=" . hash_hmac('sha1', $payloadBody, $arrSiteConfig['secretkey'], false));
   
 	// Loop through the configs to see which one matches the payload
 	foreach ($arrConfig as $strSiteName => $arrSiteConfig) {
