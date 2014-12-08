@@ -34,7 +34,7 @@
   // Check for the HTTP_X_HUB_SIGNATURE
   if(!isset($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
   	http_response_code(401);
-  	error_log("Secret (X-Hub-Signature header) is missing from request. Have you set a secret in GitHub's project settings?");
+  	error_log("GitHub Webhook Error: Secret (X-Hub-Signature header) is missing from request. Have you set a secret in GitHub's project settings?");
   }
 
 	// Grab the tastylious JSON payload from GitHub
@@ -53,11 +53,11 @@
   		break;
   	default:
   		http_response_code(400);
-  		die("Don't know what to do with {$_SERVER['CONTENT_TYPE']} content type.");
+  		error_log("GitHub Webhook Error: Don't know what to do with {$_SERVER['CONTENT_TYPE']} content type.");
   } 
   if(!$payloadBody) {
   	http_response_code(400);
-  	die('No POST body sent.');
+  	error_log('GitHub Webhook Error: No POST body sent.');
   }
   
   // Hashed secret key
@@ -82,7 +82,7 @@
     
     // Secret key check
     if(($arrSiteConfig['secretkey'] != '*') && md5($secretKey) !== md5($_SERVER['HTTP_X_HUB_SIGNATURE']))) {
-    	error_log("Secret (X-Hub-Signature header) is wrong or does not match request body.");
+    	error_log("GitHub Webhook Error: Secret (X-Hub-Signature header) is wrong or does not match request body.");
       $boolPassesChecks = FALSE;
     }
 
