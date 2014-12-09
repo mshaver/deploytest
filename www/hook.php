@@ -70,7 +70,6 @@
         'secretkey' => '*',
 				'branch' => '*',
         'release' => '*',
-				'username' => '*',
 				'execute' => array()
 			), 
 			$arrSiteConfig
@@ -94,11 +93,6 @@
 		
 		// Branch name check
 		if (isset($objPayload->ref) && ($arrSiteConfig['branch'] != '*') && ('refs/heads/'.$arrSiteConfig['branch'] != $objPayload->ref)) {
-			$boolPassesChecks = FALSE;
-		}
-		
-		// Username name check
-		if (($arrSiteConfig['username'] != '*') && ($arrSiteConfig['username'] != $objPayload->head_commit->committer->username)) {
 			$boolPassesChecks = FALSE;
 		}
     
