@@ -75,8 +75,6 @@
 			), 
 			$arrSiteConfig
 		);
-    
-    error_log(var_dump($arrSiteConfig));
 
 		$boolPassesChecks = TRUE;
     
