@@ -69,6 +69,7 @@
 				'repository' => '*',
         'secretkey' => '*',
 				'branch' => '*',
+        'release' => '*',
 				'username' => '*',
 				'execute' => array()
 			), 
@@ -92,12 +93,17 @@
 		}
 		
 		// Branch name check
-		if (($arrSiteConfig['branch'] != '*') && ('refs/heads/'.$arrSiteConfig['branch'] != $objPayload->ref)) {
+		if (isset($objPayload->ref) && ($arrSiteConfig['branch'] != '*') && ('refs/heads/'.$arrSiteConfig['branch'] != $objPayload->ref)) {
 			$boolPassesChecks = FALSE;
 		}
 		
 		// Username name check
 		if (($arrSiteConfig['username'] != '*') && ($arrSiteConfig['username'] != $objPayload->head_commit->committer->username)) {
+			$boolPassesChecks = FALSE;
+		}
+    
+		// Release check
+		if (($arrSiteConfig['release'] != '*') && ($objPayload->release->draft != 'true') && ($objPayload->release->prerelease != 'true')) {
 			$boolPassesChecks = FALSE;
 		}
 
