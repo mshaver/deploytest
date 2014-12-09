@@ -103,7 +103,7 @@
 		}
     
 		// Release check
-		if (($arrSiteConfig['release'] != '*') && ($objPayload->release->draft != 'true') && ($objPayload->release->prerelease != 'true')) {
+		if (isset($objPayload->release) && ($arrSiteConfig['release'] != '*') && ($objPayload->release->draft != 'true') && ($objPayload->release->prerelease != 'true')) {
 			$boolPassesChecks = FALSE;
 		}
 
