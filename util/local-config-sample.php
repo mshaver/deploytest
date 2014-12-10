@@ -21,20 +21,21 @@
 	 *	-------------------------
 	 *
 	 *	Defaults:
-	 *		'repository' => '*'
-   *    'secretkey' => '*'
-	 *		'branch' => '*'
-	 *		'server' => '*'
-	 *		'execute' => array()
+	 *	'repository' => '*'
+	 *    	'secretkey' => '*'
+	 *	'branch' => '*'
+	 *	'server' => '*'
+	 *	'execute' => array()
 	 */
 
 	$boolDebugLogging = TRUE;
 
-	$arrConfig['NICE_CAPTION'] = array(
-		'repository' => 'MY_REPO_NAME',
-    'branch' => 'BRANCH_NAME',
-    'server' => 'SERVER'
+	$arrConfig['SITE_NAME'] = array(
+		'repository' => 'REPO_NAME',
+		'secretkey' => 'SECRET_KEY',
+                'branch' => 'BRANCH_NAME',
+                'server' => 'SERVER',
 		'execute' => array(
-			'cd /var/www/MY_WEB_FOLDER; git reset --hard HEAD 2>&1; git clean -f -d 2>&1; git pull 2>&1'
+		'cd /var/www/MY_WEB_FOLDER; git reset --hard HEAD 2>&1; git clean -f -d 2>&1; git pull 2>&1'
 		)
 	);
