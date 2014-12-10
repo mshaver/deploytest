@@ -69,7 +69,6 @@
 				'repository' => '*',
         'secretkey' => '*',
 				'branch' => '*',
-        'release' => '*',
         'server' => '*',
 				'execute' => array()
 			), 
