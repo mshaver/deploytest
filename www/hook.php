@@ -70,39 +70,43 @@
         'secretkey' => '*',
 				'branch' => '*',
         'release' => '*',
+        'server' => '*',
 				'execute' => array()
 			), 
 			$arrSiteConfig
 		);
-
-		$boolPassesChecks = TRUE;
     
     // Hashed secret key
     $secretKey = "sha1=" . hash_hmac('sha1', $payloadBody, $arrSiteConfig['secretkey'], false);
     
     // Secret key check
     if(($arrSiteConfig['secretkey'] != '*') && md5($secretKey) !== md5($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
-    	error_log("GitHub Webhook Error: Secret (X-Hub-Signature header) is wrong or does not match request body.");
-      $boolPassesChecks = FALSE;
+      error_log("GitHub Webhook Error: Secret (X-Hub-Signature header) is wrong or does not match request body.");
+      exit();
     }
 
 		// Repository name check
 		if (($arrSiteConfig['repository'] != '*') && ($arrSiteConfig['repository'] != $objPayload->repository->name)) {
-			$boolPassesChecks = FALSE;
+      error_log("GitHub Webhook Error: Repository sent does not match local-config.");
+      exit();
 		}
-		
-		// Branch name check
-		if (isset($objPayload->ref) && ($arrSiteConfig['branch'] != '*') && ('refs/heads/'.$arrSiteConfig['branch'] != $objPayload->ref)) {
-			$boolPassesChecks = FALSE;
-		}
-    
-		// Release check
-		if (isset($objPayload->release) && ($arrSiteConfig['release'] != '*') && ($objPayload->release->draft != 'true') && ($objPayload->release->prerelease != 'true')) {
-			$boolPassesChecks = FALSE;
-		}
+		   
+		// Release and production check
+		if (($arrSiteConfig['server'] == 'production') && (isset($objPayload->release)) && ($objPayload->release->draft != 'true') && ($objPayload->release->prerelease != 'true')) {
+			$arrSiteConfig['execute'] = (array)$arrSiteConfig['execute'];
 
-		// Execute the commands if we passed all the checks
-		if ($boolPassesChecks) {
+			foreach ($arrSiteConfig['execute'] as $arrCommand) {
+				$arrOutput = array();
+				exec($arrCommand, $arrOutput);
+
+				if (isset($boolDebugLogging) && $boolDebugLogging) {
+					error_log("GitHub Webhook Update (" . $strSiteName . "):\n" . implode("\n", $arrOutput));
+				}
+			}
+    }
+  
+		// Push and non-production check
+		elseif (($arrSiteConfig['server'] != 'production') && (isset($objPayload->ref)) && ($arrSiteConfig['branch'] != '*') && ('refs/heads/'.$arrSiteConfig['branch'] == $objPayload->ref)) {
 			$arrSiteConfig['execute'] = (array)$arrSiteConfig['execute'];
 
 			foreach ($arrSiteConfig['execute'] as $arrCommand) {
