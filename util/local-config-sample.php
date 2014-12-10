@@ -22,7 +22,7 @@
 	 *
 	 *	Defaults:
 	 *	'repository' => '*'
-	 *    	'secretkey' => '*'
+	 *  'secretkey' => '*'
 	 *	'branch' => '*'
 	 *	'server' => '*'
 	 *	'execute' => array()
@@ -33,8 +33,8 @@
 	$arrConfig['SITE_NAME'] = array(
 		'repository' => 'REPO_NAME',
 		'secretkey' => 'SECRET_KEY',
-                'branch' => 'BRANCH_NAME',
-                'server' => 'SERVER',
+    'branch' => 'BRANCH_NAME',
+    'server' => 'SERVER',
 		'execute' => array(
 		'cd /var/www/MY_WEB_FOLDER; git reset --hard HEAD 2>&1; git clean -f -d 2>&1; git pull 2>&1'
 		)
