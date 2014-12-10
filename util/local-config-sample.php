@@ -17,15 +17,15 @@
 
 
 /*
- *	Configuration Definitions
- *	-------------------------
+ * Configuration Definitions
+ * -------------------------
  *
- *	Defaults:
- *	'repository' => '*'
- *  'secretkey' => '*'
- *	'branch' => '*'
- *	'server' => '*'
- *	'execute' => array()
+ * Defaults:
+ * 'repository' => '*'
+ * 'secretkey' => '*'
+ * 'branch' => '*'
+ * 'server' => '*'
+ * 'execute' => array()
  */
 
 $boolDebugLogging = TRUE;
